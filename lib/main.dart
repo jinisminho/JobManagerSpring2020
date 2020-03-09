@@ -1,8 +1,8 @@
-//import 'package:flutter/material.dart';
-//
-//void main() => runApp(MyApp());
-//
-//class MyApp extends StatelessWidget {
+// import 'package:flutter/material.dart';
+
+// void main() => runApp(MyApp());
+
+// class MyApp extends StatelessWidget {
 //  // This widget is the root of your application.
 //  @override
 //  Widget build(BuildContext context) {
@@ -23,29 +23,29 @@
 //      home: MyHomePage(title: 'Job Manager'),
 //    );
 //  }
-//}
-//
-//class MyHomePage extends StatefulWidget {
+// }
+
+// class MyHomePage extends StatefulWidget {
 //  MyHomePage({Key key, this.title}) : super(key: key);
-//
+
 //  // This widget is the home page of your application. It is stateful, meaning
 //  // that it has a State object (defined below) that contains fields that affect
 //  // how it looks.
-//
+
 //  // This class is the configuration for the state. It holds the values (in this
 //  // case the title) provided by the parent (in this case the App widget) and
 //  // used by the build method of the State. Fields in a Widget subclass are
 //  // always marked "final".
-//
+
 //  final String title;
-//
+
 //  @override
 //  _MyHomePageState createState() => _MyHomePageState();
-//}
-//
-//class _MyHomePageState extends State<MyHomePage> {
+// }
+
+// class _MyHomePageState extends State<MyHomePage> {
 //  int _counter = 0;
-//
+
 //  void _incrementCounter() {
 //    setState(() {
 //      // This call to setState tells the Flutter framework that something has
@@ -56,7 +56,7 @@
 //      _counter++;
 //    });
 //  }
-//
+
 //  @override
 //  Widget build(BuildContext context) {
 //    // This method is rerun every time setState is called, for instance as done
@@ -108,11 +108,11 @@
 //      ), // This trailing comma makes auto-formatting nicer for build methods.
 //    );
 //  }
-//}
+// }
 //==================================================
 import 'package:flutter/material.dart';
-import 'package:jobmanager/screens/account.dart';
-import 'package:jobmanager/screens/login.dart';
+import 'package:jobmanager/screens/home_screen.dart';
+import 'package:jobmanager/screens/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
@@ -121,11 +121,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: null,
+      title: "Job Manager",
+      debugShowCheckedModeBanner: false,
+      home: MainPage(),
+      theme: ThemeData(accentColor: Colors.white70),
     );
   }
 }
@@ -134,6 +133,7 @@ class MainPage extends StatefulWidget {
   @override
   _MainPageState createState() => _MainPageState();
 }
+
 class _MainPageState extends State<MainPage> {
   SharedPreferences sharedPreferences;
 
@@ -145,10 +145,10 @@ class _MainPageState extends State<MainPage> {
 
   checkLoginStatus() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getString("accessToken") == null) {
+    if (sharedPreferences.getString("username") == null) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
-              (Route<dynamic> route) => false);
+          (Route<dynamic> route) => false);
     }
   }
 
@@ -156,18 +156,9 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("C Shop", style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.orange,
+        title: Text("Job Manager", style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.purple[200],
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.account_circle),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => AccountPage()));
-            },
-          ),
           FlatButton(
             onPressed: () {
               sharedPreferences.clear();
@@ -175,13 +166,13 @@ class _MainPageState extends State<MainPage> {
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
                       builder: (BuildContext context) => LoginPage()),
-                      (Route<dynamic> route) => false);
+                  (Route<dynamic> route) => false);
             },
             child: Text("Log Out", style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
-      body: ProductListPage(),
+      body: HomeScreen(),
     );
   }
 }
